@@ -1,120 +1,22 @@
+{% load static %}
+<html>
+    <head>
+        <title>django-chartjs!</title>
+    </head>
+    <body>
+        <h1>Some Line Charts loaded in Ajax!</h1>
 
-{% extends 'base.html' %}
+        <canvas id="myChart" width="500" height="400"></canvas>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
-
-    {% block jquery %}
-    var endpoint = '/api/chart/data'
-    var defaultData = []
-    var labels = []
-
-    var items = []
-
-
-    async function get_data(){
-        <!--To display the temperature data from json file for all motors onto console-->
-
-         $.ajax({
-            url : 'https://api.myjson.com/bins/f1zb2',
-    <!--        'https://api.myjson.com/bins/f1zb2',-->
-            dataType: 'json',
-            success: function(data){
-            var count=Object.keys(data).length
-
-                     for(var i=1; i<count;i++){
-          <!-- console.log(data[i].Temperature)-->
-
-                                    labels.push(i+1)
-                                    items.push(data[i].Temperature)
-
-
-
-                     }
-                        console.log(items)
-                     }
-        })
-    }
-
-
-
-
-    async function get_chart(){
-    await get_data();
-        $.ajax({
-            url: endpoint,
-            success: function(data){
-        var ctx = document.getElementById('myChart');
-
-        var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            xAxisID: 'Time',
-            yAxisID: 'Temperature',
-            datasets: [{
-                label: 'Temperature',
-                data: items,
-
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-
-        options: {
-
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-              },
-            error: function(error_data){
-                console.log("error");
-                console.log(error_data);
-            }
-        })
-    }
-
-
-
-    get_chart();
-
-    {% endblock jquery%}
-
-
-</script>
-
-{% block content %}
-<div class="row">
-    <div class="col-sm-12" url-endpoint='{% url "api-data" %}'>
-        <h1> Hello World </h1>
-    </div>
-        <div class="col-sm-5">
-            <canvas id="myChart" width="400" height="400"></canvas>
-        </div>
-        <div class="col-sm-5">
-           <canvas id="myChart2" width="400" height="400"></canvas>
-        </div>
-
-
-</div>
-{% endblock content %}
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+        <script type="text/javascript">
+            $.get('{% url "api-chart-data" %}', function(data) {
+                var ctx = $("#myChart").get(0).getContext("2d");
+                new Chart(ctx, {
+                    type: 'line', data: data
+                });
+            });
+        </script>
+    </body>
+</html>
