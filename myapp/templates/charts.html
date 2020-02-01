@@ -7,173 +7,98 @@
     var endpoint = '/api/chart/data'
     var defaultData = []
     var labels = []
-<!--    var customersDjango = parseInt("{{ customers }}")*230 //built-in jquery method-->
-<!--    console.log(customersDjango)-->
 
-<!-- json data reading from file-->
-<!--var jsonData = $.ajax({-->
-<!--    url : 'https://api.myjson.com/bins/f1zb2',-->
-<!--    dataType: 'json',-->
-<!--}).done(function (results) {-->
-<!--    var labels=[], data=[];-->
-<!--    results["id"].forEach(function(packet){-->
-<!--    labels.push()-->
-<!--    })-->
-<!--})-->
+    var items = []
 
-var labels = []
-var items = []
 
-<!--function get_data(){-->
-<!--$.getJSON( "https://api.myjson.com/bins/f1zb2", function( data ) {-->
+    async function get_data(){
+        <!--To display the temperature data from json file for all motors onto console-->
 
-<!--  $.each( data, function( key, val ) {-->
-<!--    items.push(val.Temperature);-->
-<!--  });-->
-<!--  console.log(items)-->
-<!--})-->
-<!--}-->
+         $.ajax({
+            url : 'https://api.myjson.com/bins/f1zb2',
+    <!--        'https://api.myjson.com/bins/f1zb2',-->
+            dataType: 'json',
+            success: function(data){
+            var count=Object.keys(data).length
+
+                     for(var i=1; i<count;i++){
+          <!-- console.log(data[i].Temperature)-->
+
+                                    labels.push(i+1)
+                                    items.push(data[i].Temperature)
 
 
 
-async function get_data(){
-    <!--To display the temperature data from json file for all motors onto console-->
-
-     $.ajax({
-        url : 'https://api.myjson.com/bins/f1zb2',
-<!--        'https://api.myjson.com/bins/f1zb2',-->
-        dataType: 'json',
-        success: function(data){
-        var count=Object.keys(data).length
-
-                 for(var i=1; i<count;i++){
-      <!-- console.log(data[i].Temperature)-->
-
-                                labels.push(i+1)
-                                items.push(data[i].Temperature)
-
-
-
-                 }
-                    console.log(items)
-                 }
-    })
-}
-
-
-
-
-<!--$.getJSON("https://api.myjson.com/bins/f1zb2", function(data) {-->
-<!--   var labels = data[0].map(function(e) {-->
-<!--      return e[0];-->
-<!--   });-->
-<!--   var data = data[0].map(function(e) {-->
-<!--      return e[1];-->
-<!--   });-->
-
-
-
-async function get_chart(){
-await get_data();
-    $.ajax({
-        url: endpoint,
-        success: function(data){
-    var ctx = document.getElementById('myChart');
-
-    var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,
-        xAxisID: 'Time',
-        yAxisID: 'Temperature',
-        datasets: [{
-            label: 'Temperature',
-            data: items,
-
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-
-    options: {
-
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
+                     }
+                        console.log(items)
+                     }
+        })
     }
-});
-          },
-        error: function(error_data){
-            console.log("error");
-            console.log(error_data);
-        }
-    })
-}
 
-function setChart(){
-    var ctx = document.getElementById('myChart');
-<!--     var ctx2 = document.getElementById('myChart2');-->
-    var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: '# of Votes',
-            data: items,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
+
+
+
+    async function get_chart(){
+    await get_data();
+        $.ajax({
+            url: endpoint,
+            success: function(data){
+        var ctx = document.getElementById('myChart');
+
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            xAxisID: 'Time',
+            yAxisID: 'Temperature',
+            datasets: [{
+                label: 'Temperature',
+                data: items,
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
             }]
+        },
+
+        options: {
+
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
+    });
+              },
+            error: function(error_data){
+                console.log("error");
+                console.log(error_data);
+            }
+        })
     }
-});
 
-}
 
-get_chart();
 
-{% endblock jquery%}
+    get_chart();
+
+    {% endblock jquery%}
 
 
 </script>
