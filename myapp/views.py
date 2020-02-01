@@ -59,10 +59,10 @@ class ChartData(BaseLineChartView):
     ## -- Process your data here!
     ## I'm guessing you want to use a line graph? I used a line graph here.
     ## Note, get the data first from somewhere.
-    ## https://github.com/peopledoc/django-chartjs
+    ## https://github.com/peopledoc/django-chartjs <-- Charts
     ## That was for charts
 
-    ## https://pypi.org/project/requests/
+    ## https://pypi.org/project/requests/ <- Fetching the data from the server. Check the examples and use them.
 
     def get_labels(self):
         """Return 7 labels for the x-axis."""
