@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
      'corsheaders',
     'myapp.apps.MyappConfig',
+    'chartjs'
 ]
 
 MIDDLEWARE = [

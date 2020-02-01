@@ -7,7 +7,8 @@ from django.shortcuts import render
 from django.views.generic import View
 # for basic query set
 from django.contrib.auth import get_user_model
-
+from django.views.generic import TemplateView
+from chartjs.views.lines import BaseLineChartView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -54,13 +55,33 @@ def get_data(request, *args, **kwargs):
 #     return Response(data) #http response
 
 # for trying out chart.js using in built generic views
-class ChartData(APIView):
+class ChartData(BaseLineChartView):
+    ## -- Process your data here!
+    ## I'm guessing you want to use a line graph? I used a line graph here.
+    ## Note, get the data first from somewhere.
+    ## https://github.com/peopledoc/django-chartjs <-- Charts
+    ## That was for charts
 
-    authentication_classes = []
-    permission_classes = []
-    def get(self, request, format=None):
-        #
-        # with open('./preddata.json','r') as f:
-        #     default_items=json.loads(f)
+    ## https://pypi.org/project/requests/ <- Fetching the data from the server. Check the examples and use them.
 
-        return Response('It worked')
+    def get_labels(self):
+        """Return 7 labels for the x-axis."""
+        return ["January", "February", "March", "April", "May", "June", "July"]
+
+    def get_providers(self):
+        """Return names of datasets."""
+        return ["Central", "Eastside", "Westside"]
+
+    def get_data(self):
+        """Return 3 datasets to plot."""
+        ## Opening a file example
+        with open('./test1.json') as f:
+            x = f.read()
+            print(x)
+
+        return [[75, 44, 92, 11, 44, 95, 35],
+                [41, 92, 18, 3, 73, 87, 92],
+                [87, 21, 94, 3, 90, 13, 65]]
+
+line_chart = TemplateView.as_view(template_name='line_chart.html')
+line_chart_json = ChartData.as_view()
